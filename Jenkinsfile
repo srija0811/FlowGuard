@@ -36,7 +36,6 @@ pipeline {
                 '''
             }
         }
-    }
 
         stage('Health Check') {
             steps {
@@ -45,6 +44,7 @@ pipeline {
                 '''
             }
         }
+    }
 
     post {
         success {
@@ -57,3 +57,4 @@ pipeline {
         }
     }
 }
+
