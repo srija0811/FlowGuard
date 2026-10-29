@@ -22,9 +22,11 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
-            steps {
-                bat 'docker build -t flowguard:1.0 .'
+       stage('Docker Build') {
+    steps {
+        bat '"C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t flowguard:1.0 .'
+    }
+}
             }
         }
     }
