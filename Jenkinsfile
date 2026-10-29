@@ -38,6 +38,14 @@ pipeline {
         }
     }
 
+        stage('Health Check') {
+            steps {
+                bat '''
+                    powershell -NoProfile -Command "$ok = $false; for ($i = 0; $i -lt 10; $i++) { try { $r = Invoke-WebRequest -Uri 'http://localhost:8089/actuator/health' -UseBasicParsing -TimeoutSec 5; if ($r.StatusCode -eq 200) { $ok = $true; Write-Host $r.Content; break } } catch { Start-Sleep -Seconds 3 } }; if (-not $ok) { Write-Error 'Health check failed'; exit 1 }"
+                '''
+            }
+        }
+
     post {
         success {
             echo 'FlowGuard CI/CD pipeline completed successfully!'
