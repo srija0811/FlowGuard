@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -20,14 +21,20 @@ pipeline {
                                  fingerprint: true
             }
         }
+
+        stage('Docker Build') {
+            steps {
+                bat 'docker build -t flowguard:1.0 .'
+            }
+        }
     }
 
     post {
         success {
-            echo 'FlowGuard build and tests completed successfully!'
+            echo 'FlowGuard build, tests and Docker image creation completed!'
         }
         failure {
-            echo 'FlowGuard pipeline failed. Check the console output.'
+            echo 'Pipeline failed. Check the Console Output.'
         }
     }
 }
