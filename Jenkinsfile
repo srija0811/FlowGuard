@@ -32,7 +32,7 @@ pipeline {
             steps {
                 bat '''
                     "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" rm -f flowguard-app 2>NUL
-                    "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" run -d --name flowguard-app -p 8089:8080 flowguard:1.0
+                    "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" run -d --name flowguard-app -p 8089:8088 flowguard:1.0
                 '''
             }
         }
