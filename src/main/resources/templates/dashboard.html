@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<!--
+  FlowGuard Dashboard — Thymeleaf Template
+  =========================================
+  Thymeleaf uses th:* attributes to inject data from Java (DashboardController).
+  Every ${variable} comes from model.addAttribute() in the controller.
+  Data marked [DEMO] is hard-coded sample data from DashboardService.
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FlowGuard — DevOps Dashboard</title>
+    <!-- Link to our CSS file in src/main/resources/static/css/dashboard.css -->
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}"/>
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         SIDEBAR NAVIGATION
+         ════════════════════════════════════════════════════════════════════ -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">🛡️</div>
+            FlowGuard
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Overview</div>
+            <div class="nav-item active">
+                <span class="nav-icon">📊</span> Dashboard
+            </div>
+
+            <div class="nav-section-label" style="margin-top:0.75rem;">DevOps</div>
+            <div class="nav-item">
+                <span class="nav-icon">🔄</span> CI/CD Pipeline
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🚀</span> Deployments
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🐳</span> Containers
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🚨</span> Incidents
+            </div>
+
+            <div class="nav-section-label" style="margin-top:0.75rem;">System</div>
+            <div class="nav-item">
+                <span class="nav-icon">❤️</span> Health
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">📈</span> Metrics
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            FlowGuard v1.0.0<br/>College DevOps Project
+        </div>
+    </aside>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         MAIN CONTENT
+         ════════════════════════════════════════════════════════════════════ -->
+    <div class="main-content">
+
+        <!-- ── Top Header ─────────────────────────────────────────────────── -->
+        <header class="top-header">
+            <div>
+                <div class="header-title">DevOps Dashboard</div>
+                <div class="header-subtitle">FlowGuard Monitoring &amp; Operations Centre</div>
+            </div>
+            <div class="header-right">
+                <span class="demo-badge">⚠ DEMO DATA</span>
+                <div class="header-badge">
+                    <!-- th:classappend adds the health CSS class (UP/DOWN) dynamically -->
+                    <span class="health-indicator"
+                          th:classappend="${appHealth}"></span>
+                    <span th:text="${appHealth}">UNKNOWN</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ── Page Body ───────────────────────────────────────────────────── -->
+        <main class="page-body">
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 SECTION 1 — STAT CARDS
+                 ══════════════════════════════════════════════════════════════ -->
+            <div class="stats-grid">
+
+                <!-- App Health (real data from Actuator) -->
+                <div class="stat-card health">
+                    <div class="stat-label">App Health</div>
+                    <div class="stat-value" th:text="${appHealth}">UP</div>
+                    <div class="stat-sub">Spring Boot Actuator — real data</div>
+                </div>
+
+                <!-- Running containers [DEMO] -->
+                <div class="stat-card containers">
+                    <div class="stat-label">Running Containers</div>
+                    <div class="stat-value" th:text="${runningContainers}">0</div>
+                    <div class="stat-sub">[DEMO] of 6 total containers</div>
+                </div>
+
+                <!-- Successful deployments [DEMO] -->
+                <div class="stat-card deployments">
+                    <div class="stat-label">Successful Deploys</div>
+                    <div class="stat-value" th:text="${successfulDeployments}">0</div>
+                    <div class="stat-sub">[DEMO] last 7 days</div>
+                </div>
+
+                <!-- Open incidents [DEMO] -->
+                <div class="stat-card incidents">
+                    <div class="stat-label">Open Incidents</div>
+                    <div class="stat-value" th:text="${openIncidents}">0</div>
+                    <div class="stat-sub">[DEMO] active right now</div>
+                </div>
+
+            </div><!-- /.stats-grid -->
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 SECTION 2 — APPLICATION HEALTH (Spring Boot Actuator)
+                 ══════════════════════════════════════════════════════════════ -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>❤️ Application Health Status</h3>
+                    <span class="status-badge"
+                          th:classappend="${appHealth.toLowerCase()}"
+                          th:text="${appHealth}">UNKNOWN</span>
+                </div>
+                <div class="card-body">
+                    <div class="health-row">
+                        <div class="health-indicator"
+                             th:classappend="${appHealth}"></div>
+                        <div class="health-text"
+                             th:classappend="${appHealth}"
+                             th:text="${appHealth}">UNKNOWN</div>
+                        <div class="health-detail">— reported by Spring Boot Actuator</div>
+                    </div>
+
+                    <div class="health-meta">
+                        <div class="health-meta-item">
+                            <span class="meta-key">Data Source</span>
+                            <span class="meta-value">Spring Boot Actuator (real)</span>
+                        </div>
+                        <div class="health-meta-item">
+                            <span class="meta-key">Actuator Endpoint</span>
+                            <span class="meta-value"><a href="/actuator/health" target="_blank">/actuator/health</a></span>
+                        </div>
+                        <div class="health-meta-item">
+                            <span class="meta-key">Framework</span>
+                            <span class="meta-value">Spring Boot 4.1.2 / Java 21</span>
+                        </div>
+                        <div class="health-meta-item">
+                            <span class="meta-key">Application</span>
+                            <span class="meta-value">FlowGuard v1.0.0</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick links to live Actuator endpoints -->
+                    <div class="actuator-links">
+                        <a class="actuator-link" href="/actuator/health" target="_blank">🔗 /health</a>
+                        <a class="actuator-link" href="/actuator/info"   target="_blank">🔗 /info</a>
+                        <a class="actuator-link" href="/actuator/metrics" target="_blank">🔗 /metrics</a>
+                        <a class="actuator-link" href="/actuator/env"    target="_blank">🔗 /env</a>
+                        <a class="actuator-link" href="/actuator"        target="_blank">🔗 All endpoints</a>
+                    </div>
+                </div>
+            </div><!-- /.card -->
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 SECTION 3 — CI/CD PIPELINE STAGES  [DEMO DATA]
+                 ══════════════════════════════════════════════════════════════ -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>🔄 CI/CD Pipeline</h3>
+                    <span class="section-note">⚠ DEMO DATA</span>
+                </div>
+                <div class="card-body">
+                    <div class="pipeline-track">
+                        <!--
+                          th:each="stage : ${pipelineStages}"
+                          loops over the List<PipelineStage> from DashboardService.
+                          th:text="${stage.name}" outputs the Java getter getName().
+                        -->
+                        <div class="pipeline-stage"
+                             th:each="stage : ${pipelineStages}">
+
+                            <!-- Coloured icon based on stage status -->
+                            <div class="stage-icon"
+                                 th:classappend="${stage.status}">
+                                <span th:switch="${stage.status}">
+                                    <span th:case="'success'">✓</span>
+                                    <span th:case="'running'">⟳</span>
+                                    <span th:case="'failed'">✗</span>
+                                    <span th:case="*">·</span>
+                                </span>
+                            </div>
+
+                            <div class="stage-name" th:text="${stage.name}">Stage</div>
+
+                            <div class="stage-meta"
+                                 th:text="${'Triggered by: ' + stage.triggeredBy}">—</div>
+
+                            <!-- Duration: only show if > 0 (pending stages have 0) -->
+                            <div class="stage-duration"
+                                 th:text="${stage.durationSecs > 0 ? stage.durationSecs + 's' : '—'}">—</div>
+
+                            <span class="status-badge"
+                                  th:classappend="${stage.status}"
+                                  th:text="${stage.status}">pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.card -->
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 SECTION 4 — DEPLOYMENT HISTORY  [DEMO DATA]
+                 ══════════════════════════════════════════════════════════════ -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>🚀 Deployment History</h3>
+                    <span class="section-note">⚠ DEMO DATA</span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Version</th>
+                                <th>Environment</th>
+                                <th>Deployed At</th>
+                                <th>Deployed By</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="dep : ${deploymentHistory}">
+                                <td><strong th:text="${dep.version}">—</strong></td>
+                                <td>
+                                    <span class="env-tag"
+                                          th:classappend="${dep.environment}"
+                                          th:text="${dep.environment}">—</span>
+                                </td>
+                                <td th:text="${dep.deployedAt}">—</td>
+                                <td th:text="${dep.deployedBy}">—</td>
+                                <td>
+                                    <span class="status-badge"
+                                          th:classappend="${dep.status}"
+                                          th:text="${dep.status}">—</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /.card -->
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 SECTION 5 — CONTAINER STATUS  [DEMO DATA]
+                 ══════════════════════════════════════════════════════════════ -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>🐳 Container Status</h3>
+                    <span class="section-note">⚠ DEMO DATA</span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Container</th>
+                                <th>Image</th>
+                                <th>Uptime</th>
+                                <th>CPU</th>
+                                <th>Memory</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="container : ${containers}">
+                                <td><strong th:text="${container.name}">—</strong></td>
+                                <td style="font-family:monospace; font-size:0.8rem; color:var(--text-secondary);"
+                                    th:text="${container.image}">—</td>
+                                <td th:text="${container.uptime}">—</td>
+
+                                <!-- CPU progress bar -->
+                                <td>
+                                    <div class="progress-bar-wrap">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill"
+                                                 th:classappend="${container.cpuPercent >= 70 ? 'high' : (container.cpuPercent >= 40 ? 'med' : '')}"
+                                                 th:style="'width:' + ${container.cpuPercent} + '%'"></div>
+                                        </div>
+                                        <span class="progress-label"
+                                              th:text="${container.cpuPercent + '%'}">0%</span>
+                                    </div>
+                                </td>
+
+                                <!-- Memory -->
+                                <td th:text="${container.memoryMb + ' MB'}">—</td>
+
+                                <td>
+                                    <span class="status-badge"
+                                          th:classappend="${container.status}"
+                                          th:text="${container.status}">—</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /.card -->
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 SECTION 6 — INCIDENT HISTORY  [DEMO DATA]
+                 ══════════════════════════════════════════════════════════════ -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>🚨 Incident History</h3>
+                    <span class="section-note">⚠ DEMO DATA</span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Severity</th>
+                                <th>Reported At</th>
+                                <th>Resolved At</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="incident : ${incidents}">
+                                <td style="font-family:monospace; font-weight:600;"
+                                    th:text="${incident.id}">—</td>
+                                <td th:text="${incident.title}">—</td>
+                                <td>
+                                    <span class="severity-badge"
+                                          th:classappend="${incident.severity}"
+                                          th:text="${incident.severity}">—</span>
+                                </td>
+                                <td th:text="${incident.reportedAt}">—</td>
+                                <td th:text="${incident.resolvedAt}">—</td>
+                                <td>
+                                    <span class="status-badge"
+                                          th:classappend="${incident.status}"
+                                          th:text="${incident.status}">—</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /.card -->
+
+        </main><!-- /.page-body -->
+
+        <footer>
+            FlowGuard — College DevOps Project &nbsp;|&nbsp;
+            Built with Spring Boot 4.1.2 · Thymeleaf · Java 21 &nbsp;|&nbsp;
+            <span style="color:var(--accent-orange);">⚠ All pipeline, container, deployment, and incident data is demo/sample data</span>
+            &nbsp;|&nbsp; Health status is real (Spring Boot Actuator)
+        </footer>
+
+    </div><!-- /.main-content -->
+</div><!-- /.layout -->
+
+</body>
+</html>
