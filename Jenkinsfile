@@ -44,12 +44,25 @@ pipeline {
                 '''
             }
         }
+
+        stage('Kubernetes Deploy') {
+            steps {
+                bat '''
+                    kubectl apply -f k8s\\deployment.yaml
+                    kubectl rollout status deployment/flowguard --timeout=120s
+                    kubectl get pods
+                    kubectl get services
+                '''
+            }
+        }
     }
 
     post {
         success {
             echo 'FlowGuard CI/CD pipeline completed successfully!'
-            echo 'Application URL: http://localhost:8089'
+            echo 'Docker application URL: http://localhost:8089'
+            echo 'Kubernetes application URL: http://localhost:30088'
+            echo 'If NodePort is inaccessible, use kubectl port-forward.'
         }
 
         failure {
@@ -57,4 +70,3 @@ pipeline {
         }
     }
 }
-
