@@ -27,14 +27,25 @@ pipeline {
                 bat '"C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t flowguard:1.0 .'
             }
         }
+
+        stage('Docker Deploy') {
+            steps {
+                bat '''
+                    "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" rm -f flowguard-app 2>NUL
+                    "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" run -d --name flowguard-app -p 8089:8080 flowguard:1.0
+                '''
+            }
+        }
     }
 
     post {
         success {
-            echo 'FlowGuard build, tests and Docker image creation completed!'
+            echo 'FlowGuard CI/CD pipeline completed successfully!'
+            echo 'Application URL: http://localhost:8089'
         }
+
         failure {
-            echo 'Pipeline failed. Check the Console Output.'
+            echo 'FlowGuard pipeline failed. Check Console Output.'
         }
     }
 }
