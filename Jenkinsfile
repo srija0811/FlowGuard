@@ -45,16 +45,18 @@ pipeline {
             }
         }
 
+       
         stage('Kubernetes Deploy') {
             steps {
                 bat '''
-                    kubectl apply -f k8s\\deployment.yaml
-                    kubectl rollout status deployment/flowguard --timeout=120s
-                    kubectl get pods
-                    kubectl get services
+                    "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\kubectl.exe" apply -f k8s\\deployment.yaml
+                    "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\kubectl.exe" rollout status deployment/flowguard --timeout=120s
+                    "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\kubectl.exe" get pods
+                    "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\kubectl.exe" get services
                 '''
             }
         }
+
     }
 
     post {
